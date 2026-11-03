@@ -1,0 +1,22 @@
+h1 { color: rgb(74, 0, 172); }
+
+#ficheLivre img {
+    display: block;
+    margin: 16px 0;
+}
+
+#ficheLivre input,
+#ficheLivre textarea,
+#ficheLivre button {
+    display: block;
+    margin-bottom: 10px;
+}
+
+#ficheLivre input[type="number"] {
+    width: 120px;
+}
+
+#ficheLivre textarea {
+    width: 300px;
+    height: 80px;
+}
