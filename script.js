@@ -24,6 +24,29 @@ const livre8 = new Livre(8, "Lakestone, Tome 1", "Sarah Rivens", ["Dark Romance"
 
 const livres = [livre1, livre2, livre3, livre4, livre5, livre6, livre7, livre8];
 
+function sauvegarder() {
+    const donnees = {};
+    livres.forEach((livre) => {
+        donnees[livre.id] = { statut: livre.statut, avis: livre.avis };
+    });
+    localStorage.setItem("bibliotheque", JSON.stringify(donnees));
+}
+
+function charger() {
+    const texte = localStorage.getItem("bibliotheque");
+    if (!texte) return;
+
+    const donnees = JSON.parse(texte);
+    livres.forEach((livre) => {
+        const sauvegarde = donnees[livre.id];
+        if (!sauvegarde) return;
+        livre.statut = sauvegarde.statut;
+        livre.avis = sauvegarde.avis;
+    });
+}
+
+charger();
+
 
 const listeLivre = document.getElementById("listeLivre")
 const vueListe = document.getElementById("vueListe");
@@ -36,16 +59,49 @@ function afficherLivres(tableau) {
     listeLivre.innerHTML = "";
 
     tableau.forEach((livre) => {
-        const carte = document.createElement("div");
-        carte.className = "carte";
+        const ligne = document.createElement("div");
+        ligne.className = `ligne ${livre.statut}`;
+
+        // Miniature : image si elle existe, sinon bloc avec l'initiale
+        let miniature;
+        if (livre.couverture) {
+            miniature = document.createElement("img");
+            miniature.src = livre.couverture;
+            miniature.alt = `Couverture de ${livre.titre}`;
+        } else {
+            miniature = document.createElement("div");
+            miniature.textContent = livre.titre.charAt(0);
+        }
+        miniature.className = "miniature";
+        miniature.addEventListener("click", () => afficherFiche(livre));
+
+        // Texte
+        const texte = document.createElement("div");
+        texte.className = "texte";
 
         const titre = document.createElement("h2");
         titre.textContent = livre.titre;
-        titre.style.cursor = "pointer";
         titre.addEventListener("click", () => afficherFiche(livre));
 
-        const infos = document.createElement("p");
-        infos.textContent = `${livre.auteur} - ${livre.genres.join(", ")} - ${livre.dateDeSortie.getFullYear()} - ${livre.statut}`;
+        const auteur = document.createElement("p");
+        auteur.className = "auteur";
+        auteur.textContent = `${livre.auteur} · ${livre.dateDeSortie.getFullYear()}`;
+
+        const genres = document.createElement("p");
+        genres.className = "genres";
+        genres.textContent = livre.genres.join(" / ");
+
+        texte.appendChild(titre);
+        texte.appendChild(auteur);
+        texte.appendChild(genres);
+
+        // Actions
+        const actions = document.createElement("div");
+        actions.className = "actions";
+
+        const badge = document.createElement("span");
+        badge.className = "badge";
+        badge.textContent = livre.statut === "deja-lu" ? "Lu" : "À lire";
 
         const boutonALire = document.createElement("button");
         boutonALire.textContent = "à lire";
@@ -54,18 +110,21 @@ function afficherLivres(tableau) {
             afficherLivres(livresAffiches);
         });
 
-        const boutonDejaLu = document.createElement("button");
-        boutonDejaLu.textContent = "déjà lu";
-        boutonDejaLu.addEventListener("click", () => {
-            livre.statut = "deja-lu";
+        const boutonStatut = document.createElement("button");
+        boutonStatut.className = "statut";
+        boutonStatut.textContent = livre.statut === "deja-lu" ? "✓ Lu" : "À lire";
+        boutonStatut.addEventListener("click", () => {
+            livre.statut = livre.statut === "deja-lu" ? "a-lire" : "deja-lu";
+            sauvegarder();
             afficherLivres(livresAffiches);
         });
 
-        carte.appendChild(titre);
-        carte.appendChild(infos);
-        carte.appendChild(boutonALire);
-        carte.appendChild(boutonDejaLu);
-        listeLivre.appendChild(carte);
+        actions.appendChild(boutonStatut);
+
+        ligne.appendChild(miniature);
+        ligne.appendChild(texte);
+        ligne.appendChild(actions);
+        listeLivre.appendChild(ligne);
     });
 }
 afficherLivres(livres);
@@ -178,6 +237,7 @@ function afficherFiche(livre) {
         if (note < 1 || note > 5 || commentaire === "") return;
 
         livre.avis.push({ note: note, commentaire: commentaire, date: new Date() });
+        sauvegarder();
         afficherFiche(livre);
     });
 
@@ -185,3 +245,5 @@ function afficherFiche(livre) {
     ficheLivre.appendChild(inputCommentaire);
     ficheLivre.appendChild(boutonAvis);
 }
+
+
