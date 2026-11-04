@@ -1,31 +1,41 @@
+
 :root {
-    --fond: #1e2b25;
-    --fond-clair: #2a3a32;
-    --texte: #ece4d3;
-    --discret: #9fae a3;
-    --accent: #e0793f;
-    --lac: #6fa3b3;
-    --trait: #44564c;
+    --fond: #2F3B2A;
+    --fond-clair: #3b4a35;
+    --parchemin: #F3EAD8;
+    --papier: #E6D5B8;
+    --mousse: #4F5D3A;
+    --rouille: #A64B1B;
+    --citrouille: #C8662B;
+    --miel: #D9A441;
+    --ecorce: #3B2618;
+    --trait: #52624a;
 }
+
 
 body {
-    font-family: "Nunito", Arial, sans-serif;
-    background-color: var(--fond);
-    color: var(--texte);
+    font-family: "Nunito Sans", Arial, sans-serif;
+    color: var(--parchemin, #F3EAD8);
     margin: 0;
     padding: 32px 20px;
+    min-height: 100vh;
+    background-color: var(--fond, #2F3B2A);
+    background-image:
+        radial-gradient(ellipse at 15% 0%, rgba(200, 102, 43, 0.22), transparent 55%),
+        radial-gradient(ellipse at 90% 100%, rgba(217, 164, 65, 0.12), transparent 50%),
+        radial-gradient(rgba(243, 234, 216, 0.06) 1px, transparent 1px),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cpath d='M30 120 C30 70 70 40 110 40 C110 80 80 120 30 120 Z' fill='%23C8662B' fill-opacity='0.07'/%3E%3C/svg%3E");
+    background-size: auto, auto, 6px 6px, 160px 160px;
+    background-attachment: fixed;
 }
-
 h1, h2, h3 {
-    font-family: "Lora", Georgia, serif;
+    font-family: "Fraunces", Georgia, serif;
     font-weight: 700;
 }
 
 h1 {
     text-align: center;
     font-size: 2.4rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
     margin: 0 0 24px;
 }
 
@@ -33,35 +43,59 @@ h1 {
 #filtres {
     display: flex;
     flex-wrap: wrap;
-    gap: 6px;
+    gap: 8px;
     justify-content: center;
     max-width: 800px;
     margin: 0 auto 32px;
 }
 
+#filtres button {
+    background-color: transparent;
+    color: var(--parchemin);
+    border: 1px solid var(--papier);
+    border-radius: 999px;
+    padding: 6px 14px;
+}
+
+#filtres button:hover {
+    background-color: var(--citrouille);
+    border-color: var(--citrouille);
+    color: var(--ecorce);
+}
+
+#filtres button.actif {
+    background-color: var(--papier);
+    border-color: var(--papier);
+    color: var(--ecorce);
+}
+
+/* Boutons généraux */
 button {
     font-family: inherit;
-    background: transparent;
-    color: var(--texte);
-    border: 1px solid var(--texte);
-    border-radius: 2px;
-    padding: 6px 12px;
+    font-weight: 600;
+    background-color: var(--rouille);
+    color: var(--parchemin);
+    border: 1px solid var(--rouille);
+    border-radius: 8px;
+    padding: 7px 14px;
     cursor: pointer;
+    transition: background-color 0.2s;
 }
 
 button:hover {
-    background: var(--accent);
-    border-color: var(--accent);
-    color: var(--fond);
+    background-color: var(--citrouille);
+    border-color: var(--citrouille);
 }
 
-/* Liste en lignes */
+/* Liste en lignes, posée sur une étagère en noyer */
 #listeLivre {
     display: flex;
     flex-direction: column;
     max-width: 800px;
     margin: 0 auto;
-    border-top: 3px solid var(--accent);
+    border-top: 3px solid var(--citrouille);
+    border-bottom: 10px solid #6B4428;
+    background-color: rgba(47, 59, 42, 0.85);
 }
 
 .ligne {
@@ -70,6 +104,10 @@ button:hover {
     gap: 16px;
     padding: 14px 8px;
     border-bottom: 1px solid var(--trait);
+}
+
+.ligne:last-child {
+    border-bottom: none;
 }
 
 .ligne:hover {
@@ -82,16 +120,16 @@ button:hover {
     height: 84px;
     object-fit: cover;
     cursor: pointer;
-    border-radius: 1px;
+    border-radius: 3px;
 }
 
 div.miniature {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: var(--lac);
-    color: var(--fond);
-    font-family: "Lora", Georgia, serif;
+    background-color: var(--mousse);
+    color: var(--miel);
+    font-family: "Fraunces", Georgia, serif;
     font-size: 1.8rem;
     font-weight: 700;
 }
@@ -108,7 +146,7 @@ div.miniature {
 }
 
 .texte h2:hover {
-    color: var(--accent);
+    color: var(--miel);
 }
 
 .texte p {
@@ -116,11 +154,22 @@ div.miniature {
     font-size: 0.9rem;
 }
 
+.auteur {
+    color: var(--papier);
+}
+
 .genres {
-    color: var(--lac);
+    color: var(--miel);
+    font-family: "Fraunces", Georgia, serif;
     font-style: italic;
 }
 
+.note {
+    color: var(--miel);
+    font-weight: 700;
+}
+
+/* Bouton de statut */
 .actions {
     display: flex;
     align-items: center;
@@ -129,83 +178,46 @@ div.miniature {
     justify-content: flex-end;
 }
 
-.actions button {
-    font-size: 0.8rem;
-    padding: 4px 8px;
-}
-
 .actions .statut {
-    min-width: 80px;
-    border-color: var(--lac);
-    color: var(--lac);
+    min-width: 84px;
+    background-color: transparent;
+    color: var(--papier);
+    border: 1px solid var(--papier);
     text-transform: uppercase;
     letter-spacing: 1px;
     font-size: 0.75rem;
+    padding: 5px 10px;
+}
+
+.actions .statut:hover {
+    background-color: var(--citrouille);
+    border-color: var(--citrouille);
+    color: var(--ecorce);
 }
 
 .ligne.deja-lu .actions .statut {
-    background-color: var(--accent);
-    border-color: var(--accent);
-    color: var(--fond);
+    background-color: var(--miel);
+    border-color: var(--miel);
+    color: var(--ecorce);
 }
 
 .ligne.deja-lu .texte h2 {
-    opacity: 0.7;
+    opacity: 0.75;
 }
 
-/* Fiche du livre : plus de bloc blanc, directement sur le fond */
+/* Fiche du livre : directement sur le fond */
 #ficheLivre {
     max-width: 700px;
     margin: 0 auto;
 }
 
-#ficheLivre img {
-    display: block;
-    margin: 16px 0;
-    max-width: 100%;
+#ficheLivre h2 {
+    font-size: 2rem;
+    margin-bottom: 8px;
 }
 
-#ficheLivre input,
-#ficheLivre textarea,
-#ficheLivre button {
-    display: block;
-    margin-bottom: 10px;
-}
-
-#ficheLivre input,
-#ficheLivre textarea {
-    font-family: inherit;
-    padding: 8px;
-    background: var(--fond-clair);
-    color: var(--texte);
-    border: 1px solid var(--trait);
-    border-radius: 2px;
-}
-
-#ficheLivre input:focus,
-#ficheLivre textarea:focus {
-    outline: none;
-    border-color: var(--accent);
-}
-
-#ficheLivre input[type="number"] {
-    width: 140px;
-}
-
-#ficheLivre textarea {
-    width: 100%;
-    max-width: 400px;
-    height: 80px;
-    box-sizing: border-box;
-}
-
-/* Téléphone : les actions passent sous le texte */
-@media (max-width: 600px) {
-    .ligne {
-        flex-wrap: wrap;
-    }
-    .actions {
-        flex-basis: 100%;
-        justify-content: flex-start;
-    }
+#ficheLivre h3 {
+    border-top: 1px solid var(--trait);
+    padding-top: 16px;
+    margin-top: 28px;
 }
